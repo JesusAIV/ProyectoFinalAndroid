@@ -48,4 +48,11 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + NombreTabla);
         onCreate(db);
     }
+
+    /**
+     * Actualiza la base de datos ante cambio de versión
+     * @param db
+     * @param antiguaversion
+     * @param nuevaversion
+     */
 }
