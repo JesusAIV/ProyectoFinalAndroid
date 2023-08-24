@@ -2,14 +2,15 @@ package com.grupo.myapplication;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-
+import android.database.Cursor;
 import java.util.ArrayList;
 
 public class PersonaDAO {
-    SQLiteDatabase database;
-    MySqliteHelper dbHelper;
-    ArrayList<Persona> lista = new ArrayList<>();
+    private SQLiteDatabase database;
+    private MySqliteHelper dbHelper;
+    public ArrayList<Persona> lista = new ArrayList<>();
 
     public PersonaDAO(Context contexto){
         dbHelper = new MySqliteHelper(contexto);
@@ -18,7 +19,8 @@ public class PersonaDAO {
     /**
      * Abre la base de datos en modo escritura para ejecutar consultas
      */
-    public void open(){
+    public void open() throws SQLException {
+
         database = dbHelper.getWritableDatabase();
     }
 
@@ -50,10 +52,34 @@ public class PersonaDAO {
         return rowId;
     }
 
-    public ArrayList<Persona> ListadoGeneral(){
+    public ArrayList<Persona> ListadoPersonas(){
         open();
 
         String[] columnas = {"codigo", "nombre", "apellido", "dni"};
 
+        Cursor cursor = database.query("persona", columnas, null, null, null, null, null);
+
+
+
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            Persona persona = new Persona();
+            persona.setCodigo(Integer.parseInt(String.valueOf(cursor.getInt(0))));
+            persona.setNombre(cursor.getString(1));
+            persona.setApellido(cursor.getString(2));
+            persona.setDni(cursor.getString(3));
+
+
+            lista.add(persona);
+
+
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        close();
+
+        return lista;
     }
 }

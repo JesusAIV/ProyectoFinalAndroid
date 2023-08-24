@@ -1,10 +1,10 @@
 package com.grupo.myapplication;
 
 public class Persona {
-    int codigo;
-    String nombre;
-    String apellido;
-    String dni;
+    private int codigo;
+    private String nombre;
+    private String apellido;
+    private String dni;
 
     public int getCodigo() {
         return codigo;
